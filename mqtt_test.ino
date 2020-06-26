@@ -3,6 +3,7 @@
 #include <PubSubClient.h> //Librairie pour la gestion Mqtt
 #include <stdlib.h>
 #include "config_wifi.h"
+#include "util.h"
 
 // test editeur externe
 
@@ -164,10 +165,3 @@ void configIot(char *name, char *ip)
   client.publish("config/name", buf);
 }
 
-//TODO
-//revoir la convertion string char* j'ai loupé un truc
-// void convertStrChar(String origin, char* convert){
-//   for(int i=0; i< origin.length(); i++){
-//     strcat(convert,origin.charAt(i));
-//   }
-// }
