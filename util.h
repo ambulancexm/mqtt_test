@@ -5,3 +5,9 @@
 //     strcat(convert,origin.charAt(i));
 //   }
 // }
+
+char* charToFloat(float origin){
+    char* buffer[50];
+    sprintf(buffer, "%f", origin);
+    return buffer
+}
