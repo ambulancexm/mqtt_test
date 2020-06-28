@@ -13,7 +13,7 @@ public:
 
     char* getName();
     void setName(char* _name);
-    void setName(String _name);
+    //void setName(String _name);
 
     int getNum();
     void setNum(int _num);
@@ -79,7 +79,7 @@ char* Data::getName(){
 void Data::setName(char* _name){
     name = _name;
 }
-void Data::setName(String _name){
+// void Data::setName(String _name){
 
-    name = "_name";
-}
+//     name = "_name";
+// }

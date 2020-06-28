@@ -21,39 +21,19 @@ configWifi *configWifis[10];
 
 void setup()
 {
-  char buffer[100];
-  convertStrChar("thomas",buffer);
-  Serial.println(buffer);
-  // datas[0] = new Data(0);
-  // datas[1] = new Data(1);
-
-  // configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
-  // configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-
-  // Serial.begin(115200);
-  // // pinMode(datas->getPin(), INPUT);
-  // // pinMode(tempExt.getPin(), INPUT);
-  // Serial.println("Num obj :");
-  // Serial.println(datas[0]->getNum());
-  // Serial.println(configWifis[0]->getNumWifi());
-  // // Serial.println("Num obj :");
-  // // Serial.println(tempExt.getNum());
-  // setup_wifi();
-  // setup_mqtt();
-  // // client.publish("loc/testMQ", "Hello from ESP8266");
-  // // do
-  // // {
-  // //   configIot(name, huawai.getMqqt_broker());
-  // //   // client.publish("config/name", name);
-  // //   delay(1500);
-  // //   cpt++;
-  // //   Serial.print("config .....");
-  // //   Serial.println(cpt);
-  // // } while (cpt < 10);
+  Serial.begin(9600);
+  setup_wifi();
+  setup_mqtt();
+  initDataDevice();
+  Serial.println("rthomas");
+  
+  
 }
 
 void loop()
 {
+  Serial.print("test retour de data :");
+  Serial.println(datas[0]->getName());
 
   char info[255];
   reconnect();
@@ -67,9 +47,6 @@ void loop()
     tmp = !tmp;
     //mqtt_publish("pub/1ab",temp);
     mqtt_publish("pub/13ab", tmp);
-
-    // Serial.print("qqchose : ");
-    // Serial.println(temp);
   }
   strcpy(info, "");
   strcat(info, configWifis[0]->getAP());
@@ -80,6 +57,20 @@ void loop()
   delay(1500);
 }
 
+void initDataDevice(){
+  
+  datas[0] = new Data(0);
+  datas[0]->setName("temperature");
+  
+  datas[1] = new Data(1);
+  datas[0]->setName("pression");
+
+  configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
+  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+}
+
+
+// config wifi 
 void setup_wifi()
 {
   int itemWifi=0;

@@ -6,7 +6,7 @@ void convertStrChar(String origin, char* convert){
     // strcat(convert,origin.charAt(i));
     convert[i] = origin.charAt(i);
   }
-  convert[origin.length()];
+  strcat(convert,"\0");
 }
 
 char* charToFloat(float origin){
