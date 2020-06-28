@@ -7,15 +7,17 @@ class configWifi
     char* pwd;
     char* mqqt_broker;
     int numWifi;
-    volatile int nbWifi = 0;
   
   public:
+    static int nbWifi ;
+
     configWifi(char* _ssid,char* _pwd, char* _mqqt_broker);
     char* getAP();
     char* getSsid();
     char* getPwd();
     char* getMqqt_broker();
     char* getNumWifi();
+    
     
 };
 
@@ -26,6 +28,8 @@ configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
   pwd = _pwd;
   mqqt_broker = _mqqt_broker;
 }
+
+ int configWifi::nbWifi = 0;
 
 char* configWifi::getAP(){
   char rt[255];

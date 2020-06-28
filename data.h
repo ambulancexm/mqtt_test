@@ -1,33 +1,85 @@
-class data
+class Data
 {
 private:
-    float temperature;
+    char* name;
+    int pin;
+    float value;
+    int num;
+
 public:
-    data();
-    void setTemperature(float _temperature);
-    void setTemperature(int _temperature);
-    float getTemperature();
-    char* toCharTemprature();
-    ~data();
+    static int nb;
+    Data();
+    Data(int _pin);
+
+    char* getName();
+    void setName(char* _name);
+    void setName(String _name);
+
+    int getNum();
+    void setNum(int _num);
+    
+    int getPin();
+    void setPin(int _pin);
+
+    float getValue();
+    void setValue(float _value);
+    void setValue(int _value);
+    
+
+    ~Data();
 };
 
-data::data()
+int Data::nb = 0;
+
+Data::Data()
+{
+    nb++;
+    num = nb;
+}
+
+Data::Data(int _pin)
+{
+    nb++;
+    num = nb;
+    pin = _pin;
+}
+
+Data::~Data()
 {
 }
 
-data::~data()
+// Value
+void Data::setValue(float _value)
 {
+    value = _value;
 }
 
-data::setTemperature(float _temperature){
-    temperature = _temperature;
+void Data::setValue(int _value)
+{
+    value = (float)_value;
 }
 
-data::setTemperature(int _temperature){
-    temperature = (float)_temperature;
+float Data::getValue()
+{
+    return value;
+}
+int Data::getNum()
+{
+    return num;
 }
 
-float data::getTemperature(){
-    return temperature;
+int Data::getPin()
+{
+    return pin;
 }
 
+char* Data::getName(){
+    return name;
+}
+void Data::setName(char* _name){
+    name = _name;
+}
+void Data::setName(String _name){
+
+    name = "_name";
+}

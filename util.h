@@ -1,13 +1,16 @@
 //TODO
 //revoir la convertion string char* j'ai loupé un truc
-// void convertStrChar(String origin, char* convert){
-//   for(int i=0; i< origin.length(); i++){
-//     strcat(convert,origin.charAt(i));
-//   }
-// }
+void convertStrChar(String origin, char* convert){
+    strcpy(convert,"");
+  for(int i=0; i< origin.length(); i++){
+    // strcat(convert,origin.charAt(i));
+    convert[i] = origin.charAt(i);
+  }
+  convert[origin.length()];
+}
 
 char* charToFloat(float origin){
-    char* buffer[50];
+    char buffer[50];
     sprintf(buffer, "%f", origin);
-    return buffer
+    return buffer;
 }

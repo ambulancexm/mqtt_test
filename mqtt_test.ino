@@ -5,6 +5,7 @@
 #include "config_wifi.h"
 #include "util.h"
 #include "configIOT.h"
+#include "data.h"
 
 long tps = 0;
 bool tmp = 0;
@@ -15,22 +16,40 @@ ESP8266WiFiMulti WiFiMulti;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+Data *datas[10];
+configWifi *configWifis[10];
+
 void setup()
 {
+  char buffer[100];
+  convertStrChar("thomas",buffer);
+  Serial.println(buffer);
+  // datas[0] = new Data(0);
+  // datas[1] = new Data(1);
 
-  Serial.begin(115200);
-  setup_wifi();
-  setup_mqtt();
-  // client.publish("loc/testMQ", "Hello from ESP8266");
-  do
-  {
-    configIot(name, huawai.getMqqt_broker());
-    // client.publish("config/name", name);
-    delay(1500);
-    cpt++;
-    Serial.print("config .....");
-    Serial.println(cpt);
-  } while (cpt < 10);
+  // configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
+  // configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+
+  // Serial.begin(115200);
+  // // pinMode(datas->getPin(), INPUT);
+  // // pinMode(tempExt.getPin(), INPUT);
+  // Serial.println("Num obj :");
+  // Serial.println(datas[0]->getNum());
+  // Serial.println(configWifis[0]->getNumWifi());
+  // // Serial.println("Num obj :");
+  // // Serial.println(tempExt.getNum());
+  // setup_wifi();
+  // setup_mqtt();
+  // // client.publish("loc/testMQ", "Hello from ESP8266");
+  // // do
+  // // {
+  // //   configIot(name, huawai.getMqqt_broker());
+  // //   // client.publish("config/name", name);
+  // //   delay(1500);
+  // //   cpt++;
+  // //   Serial.print("config .....");
+  // //   Serial.println(cpt);
+  // // } while (cpt < 10);
 }
 
 void loop()
@@ -53,7 +72,7 @@ void loop()
     // Serial.println(temp);
   }
   strcpy(info, "");
-  strcat(info, huawai.getAP());
+  strcat(info, configWifis[0]->getAP());
 
   client.publish("loc/tmpTest", info);
   nb++;
@@ -63,10 +82,16 @@ void loop()
 
 void setup_wifi()
 {
+  int itemWifi=0;
+  WiFiMulti.addAP(configWifis[0]->getSsid(), configWifis[0]->getPwd());
   //connexion au wifi
-  WiFiMulti.addAP(huawai.getSsid(), huawai.getPwd());
-  while (WiFiMulti.run() != WL_CONNECTED)
+  while (WiFiMulti.run() != WL_CONNECTED )
   {
+    itemWifi++;
+    if(itemWifi == configWifi::nbWifi){
+      itemWifi = 0;
+    }
+    WiFiMulti.addAP(configWifis[itemWifi]->getSsid(), configWifis[itemWifi]->getPwd());
     delay(500);
     Serial.print(".");
   }
