@@ -19,51 +19,15 @@ PubSubClient client(espClient);
 Data *datas[10];
 configWifi *configWifis[10];
 
-void setup()
-{
-  Serial.begin(9600);
-  setup_wifi();
-  setup_mqtt();
-  initDataDevice();
-  Serial.println("rthomas");
-  
-  
-}
 
-void loop()
-{
-  Serial.print("test retour de data :");
-  Serial.println(datas[0]->getName());
-
-  char info[255];
-  reconnect();
-  client.loop();
-  //On utilise pas un delay pour ne pas bloquer la réception de messages
-  if (millis() - tps > 10000)
-  {
-    tps = millis();
-    float temp = random(30);
-    temp = 1;
-    tmp = !tmp;
-    //mqtt_publish("pub/1ab",temp);
-    mqtt_publish("pub/13ab", tmp);
-  }
-  strcpy(info, "");
-  strcat(info, configWifis[0]->getAP());
-
-  client.publish("loc/tmpTest", info);
-  nb++;
-  //strcpy(info,"");
-  delay(1500);
-}
 
 void initDataDevice(){
   
-  datas[0] = new Data(0);
-  datas[0]->setName("temperature");
+  // datas[0] = new Data(0);
+  // datas[0]->setName("temperature");
   
-  datas[1] = new Data(1);
-  datas[0]->setName("pression");
+  // datas[1] = new Data(1);
+  // datas[0]->setName("pression");
 
   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
   configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
@@ -170,4 +134,43 @@ void configIot(char *name, char *ip)
   strcat(buf, ";");
   strcat(buf, wifiMac);
   client.publish("config/name", buf);
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+  setup_wifi();
+  setup_mqtt();
+  initDataDevice();
+  Serial.println("rthomas");
+  
+  
+}
+
+void loop()
+{
+  Serial.print("test retour de data :");
+  Serial.println(datas[0]->getName());
+
+  char info[255];
+  reconnect();
+  client.loop();
+  //On utilise pas un delay pour ne pas bloquer la réception de messages
+  if (millis() - tps > 10000)
+  {
+    tps = millis();
+    float temp = random(30);
+    temp = 1;
+    tmp = !tmp;
+    //mqtt_publish("pub/1ab",temp);
+    mqtt_publish("pub/13ab", tmp);
+  }
+  strcpy(info, "");
+  strcat(info, configWifis[0]->getAP());
+
+  client.publish("loc/tmpTest", "info");
+  nb++;
+  //strcpy(info,"");
+  delay(1500);
 }

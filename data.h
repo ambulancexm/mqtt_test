@@ -1,4 +1,12 @@
-class Data
+/**
+ * classe qui determine chaque sonde de IOT
+ * @name est le nom de la sonde qui sera codeé suivant un tableau 
+ * @pin est le numero de pin type D1 ou A0
+ * @value est la valeur en float pour l'instant
+ * @num est le numero dans la liste de sonde à l'instanciation de l'objet
+ */
+
+ class Data
 {
 private:
     char* name;
