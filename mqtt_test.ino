@@ -71,20 +71,24 @@ void setup_mqtt()
 //Callback doit être présent pour souscrire a un topic et de prévoir une action
 void callback(char *topic, byte *payload, unsigned int length)
 {
-  
+  char* str[255];
   Serial.print("topic : ");
   Serial.println(topic);
   if (strcmp(topic, "pub/test") == 0)
   {
-    Serial.print("test reussi : ");
-    Serial.println(etat);
-    etat = !etat;
-    digitalWrite(BUILTIN_LED, etat);
+      for (int i = 0; i < length; i++)
+  {
+    Serial.print((char)payload[i]);
+    str[i]=(char)payload[i]);
+  }
+  strcat(str,'\0');
   }
   else
   {
     Serial.println("test pas reussi");
   }
+  Serial.print("payload : ");
+  Serial.println(str);
 }
 
 void reconnect()
