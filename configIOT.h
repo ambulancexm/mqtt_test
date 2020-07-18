@@ -1,7 +1,7 @@
 
 
 char *name = "iot-1001";
-const char *mqtt_server = "192.168.43.109"; //Adresse IP du Broker Mqtt
+const char *mqtt_server = "176.166.1.64"; //Adresse IP du Broker Mqtt
 const int mqttPort = 1883;                  //port utilisé par le Broker
 
 

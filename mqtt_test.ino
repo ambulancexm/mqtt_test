@@ -12,6 +12,7 @@ bool tmp = 0;
 long nb = 0;
 char wifiMac[20];
 int cpt = 0;
+int etat = HIGH;
 ESP8266WiFiMulti WiFiMulti;
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -19,31 +20,30 @@ PubSubClient client(espClient);
 Data *datas[10];
 configWifi *configWifis[10];
 
+void initDataDevice()
+{
 
-
-void initDataDevice(){
-  
   // datas[0] = new Data(0);
   // datas[0]->setName("temperature");
-  
+
   // datas[1] = new Data(1);
   // datas[0]->setName("pression");
 
   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
-  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+  configWifis[1] = new configWifi("thomas", "tiliatilia", "176.166.1.64");
 }
 
-
-// config wifi 
+// config wifi
 void setup_wifi()
 {
-  int itemWifi=0;
-  WiFiMulti.addAP(configWifis[0]->getSsid(), configWifis[0]->getPwd());
+  int itemWifi = 0;
+  // WiFiMulti.addAP(configWifis[0]->getSsid(), configWifis[0]->getPwd());
   //connexion au wifi
-  while (WiFiMulti.run() != WL_CONNECTED )
+  while (WiFiMulti.run() != WL_CONNECTED)
   {
     itemWifi++;
-    if(itemWifi == configWifi::nbWifi){
+    if (itemWifi == configWifi::nbWifi)
+    {
       itemWifi = 0;
     }
     WiFiMulti.addAP(configWifis[itemWifi]->getSsid(), configWifis[itemWifi]->getPwd());
@@ -62,6 +62,7 @@ void setup_wifi()
 
 void setup_mqtt()
 {
+  pinMode(BUILTIN_LED, OUTPUT);
   client.setServer(mqtt_server, mqttPort);
   client.setCallback(callback); //Déclaration de la fonction de souscription
   reconnect();
@@ -70,26 +71,19 @@ void setup_mqtt()
 //Callback doit être présent pour souscrire a un topic et de prévoir une action
 void callback(char *topic, byte *payload, unsigned int length)
 {
-  Serial.println("-------Nouveau message du broker mqtt-----");
-  Serial.print("Canal:");
+  
+  Serial.print("topic : ");
   Serial.println(topic);
-  Serial.print("donnee:");
-  Serial.write(payload, length);
-  Serial.println();
-  if (topic == "sensor/temperature")
+  if (strcmp(topic, "pub/test") == 0)
   {
-    Serial.println("reception ok sensor ");
-  }
-
-  if ((char)payload[0] == '1')
-  {
-    Serial.println("LED ON");
-    digitalWrite(13, HIGH);
+    Serial.print("test reussi : ");
+    Serial.println(etat);
+    etat = !etat;
+    digitalWrite(BUILTIN_LED, etat);
   }
   else
   {
-    Serial.println("LED OFF");
-    digitalWrite(13, LOW);
+    Serial.println("test pas reussi");
   }
 }
 
@@ -110,8 +104,8 @@ void reconnect()
       delay(2000);
     }
   }
-  client.subscribe("sensor/temperature"); //souscription au topic led pour commander une led
-  client.subscribe("pub/13a");
+  // client.subscribe("sensor/temperature"); //souscription au topic led pour commander une led
+  // client.subscribe("pub/13a");
 }
 
 //Fonction pour publier un float sur un topic
@@ -125,52 +119,52 @@ void mqtt_publish(String topic, float t)
   client.publish(top, t_char);
 }
 
-void configIot(char *name, char *ip)
-{
-  char buf[100];
-  strcpy(buf, name);
-  strcat(buf, ";");
-  strcat(buf, ip);
-  strcat(buf, ";");
-  strcat(buf, wifiMac);
-  client.publish("config/name", buf);
-}
+// void configIot(char *name, char *ip)
+// {
+//   char buf[100];
+//   strcpy(buf, name);
+//   strcat(buf, ";");
+//   strcat(buf, ip);
+//   strcat(buf, ";");
+//   strcat(buf, wifiMac);
+//   client.publish("config/name", buf);
+// }
 
 void setup()
 {
   Serial.begin(9600);
-  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+  configWifis[0] = new configWifi("thomas", "tiliatilia", "176.166.1.64");
+  // initDataDevice();
   setup_wifi();
   setup_mqtt();
-  initDataDevice();
-  Serial.println("rthomas");
-  
-  
+  // Serial.println("rthomas");
 }
 
 void loop()
 {
-  Serial.print("test retour de data :");
-  Serial.println(datas[0]->getName());
+  // // Serial.print("test retour de data :");
+  // // Serial.println(datas[0]->getName());
 
-  char info[255];
+  // char info[255];
   reconnect();
   client.loop();
-  //On utilise pas un delay pour ne pas bloquer la réception de messages
-  if (millis() - tps > 10000)
+  // //On utilise pas un delay pour ne pas bloquer la réception de messages
+  if (millis() - tps > 2000)
   {
     tps = millis();
     float temp = random(30);
     temp = 1;
     tmp = !tmp;
     //mqtt_publish("pub/1ab",temp);
-    mqtt_publish("pub/13ab", tmp);
+    // mqtt_publish("pub/13ab", tmp);
+    client.subscribe("pub/test");
   }
-  strcpy(info, "");
-  strcat(info, configWifis[0]->getAP());
 
-  client.publish("loc/tmpTest", "info");
-  nb++;
-  //strcpy(info,"");
-  delay(1500);
+  // // strcpy(info, "");
+  // // strcat(info, configWifis[0]->getAP());
+
+  // // client.publish("loc/tmpTest", "info");
+  // // nb++;
+  // // //strcpy(info,"");
+  // // delay(1500);
 }

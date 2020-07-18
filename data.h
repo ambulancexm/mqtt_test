@@ -12,7 +12,7 @@ private:
     char* name;
     int pin;
     float value;
-    int num;
+    int numData;
 
 public:
     static int nb;
@@ -23,8 +23,8 @@ public:
     void setName(char* _name);
     //void setName(String _name);
 
-    int getNum();
-    void setNum(int _num);
+    int getnumData();
+    void setnumData(int _numData);
     
     int getPin();
     void setPin(int _pin);
@@ -42,13 +42,13 @@ int Data::nb = 0;
 Data::Data()
 {
     nb++;
-    num = nb;
+    numData = nb;
 }
 
 Data::Data(int _pin)
 {
     nb++;
-    num = nb;
+    numData = nb;
     pin = _pin;
 }
 
@@ -71,9 +71,9 @@ float Data::getValue()
 {
     return value;
 }
-int Data::getNum()
+int Data::getnumData()
 {
-    return num;
+    return numData;
 }
 
 int Data::getPin()
