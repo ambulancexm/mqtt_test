@@ -10,7 +10,7 @@ class configWifi
   
   public:
     static int nbWifi ;
-
+    configWifi(char* _ssid,char* _pwd);
     configWifi(char* _ssid,char* _pwd, char* _mqqt_broker);
     char* getAP();
     char* getSsid();
@@ -20,6 +20,13 @@ class configWifi
     
     
 };
+configWifi::configWifi(char* _ssid,char* _pwd){
+  nbWifi++;
+  numWifi= nbWifi;
+  ssid = _ssid;
+  pwd = _pwd;
+}
+
 
 configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
   nbWifi++;

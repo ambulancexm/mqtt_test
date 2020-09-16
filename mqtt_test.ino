@@ -71,24 +71,13 @@ void setup_mqtt()
 //Callback doit être présent pour souscrire a un topic et de prévoir une action
 void callback(char *topic, byte *payload, unsigned int length)
 {
-  char* str[255];
-  Serial.print("topic : ");
-  Serial.println(topic);
-  if (strcmp(topic, "pub/test") == 0)
-  {
-      for (int i = 0; i < length; i++)
-  {
-    Serial.print((char)payload[i]);
-    str[i]=(char)payload[i]);
+  switch (topic) {
+    case "temp":
+      break;
+    case "autreChose":
+      break;
   }
-  strcat(str,'\0');
-  }
-  else
-  {
-    Serial.println("test pas reussi");
-  }
-  Serial.print("payload : ");
-  Serial.println(str);
+
 }
 
 void reconnect()
@@ -123,17 +112,6 @@ void mqtt_publish(String topic, float t)
   client.publish(top, t_char);
 }
 
-// void configIot(char *name, char *ip)
-// {
-//   char buf[100];
-//   strcpy(buf, name);
-//   strcat(buf, ";");
-//   strcat(buf, ip);
-//   strcat(buf, ";");
-//   strcat(buf, wifiMac);
-//   client.publish("config/name", buf);
-// }
-
 void setup()
 {
   Serial.begin(9600);
@@ -146,10 +124,7 @@ void setup()
 
 void loop()
 {
-  // // Serial.print("test retour de data :");
-  // // Serial.println(datas[0]->getName());
-
-  // char info[255];
+  
   reconnect();
   client.loop();
   // //On utilise pas un delay pour ne pas bloquer la réception de messages
@@ -159,16 +134,8 @@ void loop()
     float temp = random(30);
     temp = 1;
     tmp = !tmp;
-    //mqtt_publish("pub/1ab",temp);
-    // mqtt_publish("pub/13ab", tmp);
-    client.subscribe("pub/test");
+    client.subscribe("affiche/wifi");
   }
 
-  // // strcpy(info, "");
-  // // strcat(info, configWifis[0]->getAP());
-
-  // // client.publish("loc/tmpTest", "info");
-  // // nb++;
-  // // //strcpy(info,"");
-  // // delay(1500);
+  
 }

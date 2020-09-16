@@ -24,11 +24,14 @@
 #include <PubSubClient.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#include "toneX.h"
+
+
 
 #define LIGHT 13
 #define SPEEDMOTOR 20
 #define ONE_WIRE_BUS D2
+#define DOORBELL D3
+int etatBouton = 1;
 
 //config température dallas
 OneWire oneWire(ONE_WIRE_BUS);
@@ -37,10 +40,9 @@ DallasTemperature sensors(&oneWire);
 const char *ssid = "NETGEAR51";
 const char *password = "livelylotus015";
 const char *mqtt_server = "176.166.1.64";
+const char *iotName ="sonettePortail";
+const char *gps ="garnerans";
 
-int stepsPerRevolution = 360;
-Stepper volant(stepsPerRevolution, D5, D6, D7, D8);
-Stepper antiVolant(stepsPerRevolution, D8, D6, D7, D5); // Tourne dans le sens trigonométrique, bien
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -85,34 +87,18 @@ void callback(char *topic, byte *payload, unsigned int length)
   {
     Serial.print((char)payload[i]);
   }
-  Serial.println(strcmp(topic,"action/sonnette"));
-  if(strcmp(topic,"action/sonnette") == 0 && (char)payload[0] == '0' ){
-    Serial.println("ça sonne");
+  Serial.println(strcmp(topic,"portier"));
+  if(strcmp(topic,"portier") == 0){
     Serial.print(topic);
-    play();
+    
   }
 
-    volant.setSpeed(SPEEDMOTOR);
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1')
-  {
-    // digitalWrite(D4, LOW);
-    //igitalWrite(LED_BUILTIN, LOW); // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is active low on the ESP-01)
-
-    volant.step(stepsPerRevolution/36);
-  }
-  else if ((char)payload[0] == '0')
-  {
-    digitalWrite(LED_BUILTIN, HIGH); // Turn the LED off by making the voltage HIGH
-    //digitalWrite(D4, HIGH);
-    antiVolant.step(stepsPerRevolution/36);
-  }
+  
 }
 
 void reconnect()
 {
+  char topic[50];
   // Loop until we're reconnected
   while (!client.connected())
   {
@@ -125,7 +111,7 @@ void reconnect()
     {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
+      client.publish("openIot", createTopic(topic));
       // ... and resubscribe
       client.subscribe("inTopic");
     }
@@ -140,9 +126,38 @@ void reconnect()
   }
 }
 
+char* createTopic(char *topic){
+  char str[50];
+  strcpy(str,gps);
+  strcat(str,"/");
+  strcat(str,iotName);
+  strcpy(topic,str);
+}
+
+void sonnette(int pin){
+  char str[50];
+  
+    
+  if (digitalRead(pin) == 1 && etatBouton == 0 ){
+    sprintf(str,"%d",1);
+    client.publish("action/sonnette", str);
+    etatBouton = 1;
+    Serial.println("marche");
+    delay(100);
+  }
+  if (digitalRead(pin) == 0){
+    sprintf(str,"%d",0);
+    client.publish("action/sonnette", str);
+    Serial.println("arret");
+    etatBouton = 0;
+    delay(100);
+  }
+}
+
 void setup()
 {
   sensors.begin();
+  pinMode(DOORBELL,INPUT_PULLUP);
   pinMode(BUILTIN_LED, OUTPUT); // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
@@ -158,23 +173,23 @@ void loop()
     reconnect();
   }
   client.loop();
-  sensors.requestTemperatures();
-  unsigned long now = millis();
-  double temp = sensors.getTempCByIndex(0);
-  //temp = (temp-32)*5/9;
-  
-  if (now - lastMsg > 2000)
-  {
-    lastMsg = now;
-    ++value;
-    snprintf(msg, MSG_BUFFER_SIZE, "%2lf", temp);
-    Serial.print("Publish message: ");
-    Serial.println(temp);
-    sprintf(str,"number #%d",value);
-    client.publish("temp", msg);
-    sprintf(str,"%d",99);
-    client.publish("ping",str);
-    client.subscribe("action/sonnette");
-    //client.setCallback(callback);
-  }
+//  sensors.requestTemperatures();
+//  unsigned long now = millis();
+//  double temp = sensors.getTempCByIndex(0);
+//  //temp = (temp-32)*5/9;
+//  
+//  if (now - lastMsg > 2000)
+//  {
+//    lastMsg = now;
+//    ++value;
+//    snprintf(msg, MSG_BUFFER_SIZE, "%2lf", temp);
+//    Serial.print("Publish message: ");
+//    Serial.println(temp);
+//    sprintf(str,"number #%d",value);
+//    client.publish("temp", msg);
+//    sprintf(str,"%d",99);
+//    client.publish("ping",str);
+//   
+//  }
+    sonnette(DOORBELL);
 }
