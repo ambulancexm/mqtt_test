@@ -6,12 +6,14 @@
 #include "util.h"
 #include "configIOT.h"
 #include "data.h"
+#include "constante.h"
 
 long tps = 0;
 bool tmp = 0;
 long nb = 0;
 char wifiMac[20];
 int cpt = 0;
+
 ESP8266WiFiMulti WiFiMulti;
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -23,12 +25,6 @@ configWifi *configWifis[10];
 
 void initDataDevice(){
   
-  // datas[0] = new Data(0);
-  // datas[0]->setName("temperature");
-  
-  // datas[1] = new Data(1);
-  // datas[0]->setName("pression");
-
   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
   configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
 }
@@ -37,26 +33,26 @@ void initDataDevice(){
 // config wifi 
 void setup_wifi()
 {
-  int itemWifi=0;
-  WiFiMulti.addAP(configWifis[0]->getSsid(), configWifis[0]->getPwd());
-  //connexion au wifi
-  while (WiFiMulti.run() != WL_CONNECTED )
+
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED)
   {
-    itemWifi++;
-    if(itemWifi == configWifi::nbWifi){
-      itemWifi = 0;
-    }
-    WiFiMulti.addAP(configWifis[itemWifi]->getSsid(), configWifis[itemWifi]->getPwd());
     delay(500);
     Serial.print(".");
   }
-  Serial.println("");
-  Serial.println("WiFi connecté");
-  Serial.print("MAC : ");
-  // convertStrChar(WiFi.macAddress(),wifiMac);
-  Serial.println(WiFi.macAddress());
 
-  Serial.print("Adresse IP : ");
+  randomSeed(micros());
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
 
@@ -127,22 +123,22 @@ void mqtt_publish(String topic, float t)
 
 void configIot(char *name, char *ip)
 {
-  char buf[100];
-  strcpy(buf, name);
-  strcat(buf, ";");
-  strcat(buf, ip);
-  strcat(buf, ";");
-  strcat(buf, wifiMac);
-  client.publish("config/name", buf);
+  // char buf[100];
+  // strcpy(buf, name);
+  // strcat(buf, ";");
+  // strcat(buf, ip);
+  // strcat(buf, ";");
+  // strcat(buf, wifiMac);
+  // client.publish("config/name", buf);
 }
 
 void setup()
 {
-  Serial.begin(9600);
-  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-  setup_wifi();
-  setup_mqtt();
-  initDataDevice();
+  Serial.begin(115200);
+ configWifis[0] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+   setup_wifi();
+  // setup_mqtt();
+  //initDataDevice();
   Serial.println("rthomas");
   
   
@@ -150,27 +146,27 @@ void setup()
 
 void loop()
 {
-  Serial.print("test retour de data :");
-  Serial.println(datas[0]->getName());
+  // Serial.print("test retour de data :");
+  // //Serial.println(datas[0]->getName());
 
-  char info[255];
-  reconnect();
-  client.loop();
-  //On utilise pas un delay pour ne pas bloquer la réception de messages
-  if (millis() - tps > 10000)
-  {
-    tps = millis();
-    float temp = random(30);
-    temp = 1;
-    tmp = !tmp;
-    //mqtt_publish("pub/1ab",temp);
-    mqtt_publish("pub/13ab", tmp);
-  }
-  strcpy(info, "");
-  strcat(info, configWifis[0]->getAP());
+  // char info[255];
+  // reconnect();
+  // client.loop();
+  // //On utilise pas un delay pour ne pas bloquer la réception de messages
+  // if (millis() - tps > 10000)
+  // {
+  //   tps = millis();
+  //   float temp = random(30);
+  //   temp = 1;
+  //   tmp = !tmp;
+  //   //mqtt_publish("pub/1ab",temp);
+  //   mqtt_publish("pub/13ab", tmp);
+  // }
+  // // strcpy(info, "");
+  // // strcat(info, configWifis[0]->getAP());
 
-  client.publish("loc/tmpTest", "info");
-  nb++;
-  //strcpy(info,"");
-  delay(1500);
+  // client.publish("loc/tmpTest", "info");
+  // nb++;
+  // //strcpy(info,"");
+  // delay(1500);
 }

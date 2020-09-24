@@ -33,7 +33,7 @@ configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
 
 char* configWifi::getAP(){
   char rt[255];
-  strcat(rt,ssid);
+  strcpy(rt,ssid);
   strcat(rt,";");
   strcat(rt,pwd);
   strcat(rt,";");
