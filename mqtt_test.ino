@@ -135,7 +135,7 @@ void configIot(char *name, char *ip)
 void setup()
 {
   Serial.begin(115200);
- configWifis[0] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+ //configWifis[0] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
    setup_wifi();
   // setup_mqtt();
   //initDataDevice();
