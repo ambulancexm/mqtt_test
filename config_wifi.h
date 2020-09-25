@@ -1,4 +1,9 @@
 #include <stdlib.h>
+#include "constante.h"
+#include <string.h>
+#include "util.h"
+
+
 
 class configWifi
 {
@@ -7,20 +12,29 @@ class configWifi
     char* pwd;
     char* mqqt_broker;
     int numWifi;
+    char* ip;
+    char* mac;
   
   public:
     static int nbWifi ;
+    static long cpt;
 
     configWifi(char* _ssid,char* _pwd, char* _mqqt_broker);
+    configWifi();
     char* getAP();
     char* getSsid();
     char* getPwd();
     char* getMqqt_broker();
     char* getNumWifi();
-    
+    void setIp(String ip);
+    void setMac(String mac);
+    char* getIp();
+    char* getMac();
     
 };
 
+int configWifi::nbWifi = 0;
+long configWifi::cpt= 0;
 configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
   nbWifi++;
   numWifi= nbWifi;
@@ -29,7 +43,11 @@ configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
   mqqt_broker = _mqqt_broker;
 }
 
- int configWifi::nbWifi = 0;
+configWifi::configWifi(){
+  nbWifi++;
+}
+
+ 
 
 char* configWifi::getAP(){
   char rt[255];
@@ -44,6 +62,28 @@ char* configWifi::getAP(){
   
   return rt;
 }
+// ip
+char* configWifi::getIp(){
+  Serial.print("dans le getter : ");
+  Serial.println(this->ip);
+  return this->ip;
+}
+
+void configWifi::setIp(String ip){
+  this->ip = stringToChar(ip);
+}
+
+//mac
+char* configWifi::getMac(){
+  return this->mac;
+}
+void configWifi::setMac(String mac){
+  this->mac = stringToChar(mac);
+}
+
+
+
+
 
 char* configWifi::getSsid(){
   return ssid;
@@ -64,3 +104,11 @@ char* configWifi::getNumWifi(){
   sprintf(buffer, "%d", numWifi);
   return buffer;
 }
+
+
+long fonctionSeule(){
+  return configWifi::cpt;
+}
+
+
+

@@ -3,10 +3,10 @@
 #include <PubSubClient.h> //Librairie pour la gestion Mqtt
 #include <stdlib.h>
 #include "config_wifi.h"
-#include "util.h"
+// #include "util.h"
 #include "configIOT.h"
 #include "data.h"
-#include "constante.h"
+
 
 long tps = 0;
 bool tmp = 0;
@@ -19,15 +19,15 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 Data *datas[10];
-configWifi *configWifis[10];
+// configWifi *configWifis[10];
 
+configWifi* homeWifi = new configWifi();
 
-
-void initDataDevice(){
+// void initDataDevice(){
   
-  configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
-  configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-}
+//   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
+//   configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
+// }
 
 
 // config wifi 
@@ -49,13 +49,21 @@ void setup_wifi()
   }
 
   randomSeed(micros());
+  // char str[20];
+  // Serial.println(WiFi.localIP().toString());
+  // strcpy(str,WiFi.localIP());
+  String ip = WiFi.localIP().toString();
+  
+ 
 
+  homeWifi->setIp(WiFi.localIP().toString());
+  homeWifi->setMac(WiFi.macAddress());
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  Serial.println(homeWifi->getIp());
   Serial.println("MAC address: ");
-  Serial.println(WiFi.macAddress());
+  Serial.println(homeWifi->getMac());
 }
 
 void setup_mqtt()
@@ -141,7 +149,7 @@ void setup()
    setup_wifi();
   // setup_mqtt();
   //initDataDevice();
-  Serial.println("rthomas");
+  Serial.println(fonctionSeule());
   
   
 }
