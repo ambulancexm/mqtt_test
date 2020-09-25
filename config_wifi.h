@@ -2,7 +2,10 @@
 #include "constante.h"
 #include <string.h>
 #include "util.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
 
+ESP8266WiFiMulti wifiMulti;
 
 
 class configWifi
@@ -14,12 +17,14 @@ class configWifi
     int numWifi;
     char* ip;
     char* mac;
+    
   
   public:
     static int nbWifi ;
     static long cpt;
 
     configWifi(char* _ssid,char* _pwd, char* _mqqt_broker);
+    configWifi(char* _ssid,char* _pwd);
     configWifi();
     char* getAP();
     char* getSsid();
@@ -32,6 +37,8 @@ class configWifi
     void setMac(char* mac);
     char* getIp();
     char* getMac();
+    void switchWifi();
+    void runWifi();
     
 };
 
@@ -44,6 +51,14 @@ configWifi::configWifi(char* _ssid,char* _pwd,char* _mqqt_broker){
   pwd = _pwd;
   mqqt_broker = _mqqt_broker;
 }
+
+configWifi::configWifi(char* _ssid,char* _pwd){
+  nbWifi++;
+  numWifi= nbWifi;
+  ssid = _ssid;
+  pwd = _pwd;
+}
+
 
 configWifi::configWifi(){
   nbWifi++;
@@ -118,4 +133,41 @@ long fonctionSeule(){
 }
 
 
+void configWifi::switchWifi(){
+  
+}
 
+void configWifi::runWifi(){
+  WiFi.begin(ssid, password);
+  Serial.println("");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("Connecting Wifi...");
+  if (wifiMulti.run() == WL_CONNECTED) {
+    char _ip[20];
+    char _mac[25];
+ 
+  strcpy(_ip,stringToChar(WiFi.localIP().toString()));
+  strcpy(_mac,stringToChar(WiFi.macAddress()));
+
+  setIp(_ip);
+  setMac(_mac);
+    // char str[13];
+    // strcpy(str,WiFi.localIP());
+    // setIp(WiFi.localIP().toString());
+    // setMac(WiFi.macAddress());
+    Serial.println("");
+    Serial.println("WiFi connected");
+    Serial.println("IP address: ");
+    Serial.println(getIp());
+    Serial.println(getMac());
+
+    // Serial.println(WiFi.localIP());
+    // Serial.println(WiFi.macAddress());
+
+  }
+}

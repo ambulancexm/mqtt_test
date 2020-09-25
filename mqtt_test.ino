@@ -20,56 +20,15 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 Data *datas[10];
-// configWifi *configWifis[10];
+configWifi *configWifis[10];
 
-configWifi* homeWifi = new configWifi();
+configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
 
 // void initDataDevice(){
   
 //   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
 //   configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
 // }
-
-
-// config wifi 
-void setup_wifi()
-{
-
-  delay(10);
-  // We start by connecting to a WiFi network
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-
-  randomSeed(micros());
-  char ip[20];
-  char mac[25];
-  // Serial.println(WiFi.localIP().toString());
-  // strcpy(str,WiFi.localIP());
-  // String ip = WiFi.localIP().toString();
-  strcpy(ip,stringToChar2(WiFi.localIP().toString()));
-  strcpy(mac,stringToChar2(WiFi.macAddress()));
-
-  homeWifi->setIp(ip);
-  homeWifi->setMac(mac);
-  // homeWifi->setMac(WiFi.macAddress());
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(homeWifi->getIp());
-  Serial.println(ip);
-  Serial.println("MAC address: ");
-  Serial.println(homeWifi->getMac());
-
-}
 
 void setup_mqtt()
 {
@@ -136,22 +95,13 @@ void mqtt_publish(String topic, float t)
   client.publish(top, t_char);
 }
 
-void configIot(char *name, char *ip)
-{
-  // char buf[100];
-  // strcpy(buf, name);
-  // strcat(buf, ";");
-  // strcat(buf, ip);
-  // strcat(buf, ";");
-  // strcat(buf, wifiMac);
-  // client.publish("config/name", buf);
-}
 
 void setup()
 {
   Serial.begin(115200);
+  homeWifi->runWifi();
  //configWifis[0] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-   setup_wifi();
+   //setup_wifi();
   // setup_mqtt();
   //initDataDevice();
   // Serial.println(fonctionSeule());
@@ -161,8 +111,8 @@ void setup()
 
 void loop()
 {
-  serial.println("fin");
-  
+  // Serial.println("fin");
+
   // Serial.print("test retour de data :");
   // //Serial.println(datas[0]->getName());
 
@@ -173,7 +123,7 @@ void loop()
   // if (millis() - tps > 10000)
   // {
   //   tps = Serial.print("str :" );
-  Serial.println(tmp); 1;
+  // Serial.println(tmp); 1;
   //   tmp = !tmp;
   //   //mqtt_publish("pub/1ab",temp);
   //   mqtt_publish("pub/13ab", tmp);
