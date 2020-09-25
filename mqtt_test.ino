@@ -3,11 +3,8 @@
 #include <PubSubClient.h> //Librairie pour la gestion Mqtt
 #include <stdlib.h>
 #include "config_wifi.h"
-// #include "util.h"
 #include "configIOT.h"
 #include "data.h"
-
-char * stringToChar2(String str);
 
 long tps = 0;
 bool tmp = 0;
@@ -15,7 +12,6 @@ long nb = 0;
 char wifiMac[20];
 int cpt = 0;
 
-ESP8266WiFiMulti WiFiMulti;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -23,7 +19,7 @@ Data *datas[10];
 configWifi *configWifis[10];
 
 configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
-
+configIot* iot = new configIot();
 // void initDataDevice(){
   
 //   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
@@ -100,17 +96,14 @@ void setup()
 {
   Serial.begin(115200);
   homeWifi->runWifi();
- //configWifis[0] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-   //setup_wifi();
-  // setup_mqtt();
-  //initDataDevice();
-  // Serial.println(fonctionSeule());
-  
-  
+  iot->runIot();
+   
 }
 
 void loop()
 {
+
+
   // Serial.println("fin");
 
   // Serial.print("test retour de data :");
@@ -138,11 +131,3 @@ void loop()
 }
 
 
-char * stringToChar2(String str) {
-  char tmp[str.length()+1];
-  for (int i =0; i< str.length(); i++){
-    tmp[i] = str[i];
-  }
-  tmp[str.length()] ='\0';
-  return tmp;
-}

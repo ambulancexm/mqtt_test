@@ -156,18 +156,11 @@ void configWifi::runWifi(){
 
   setIp(_ip);
   setMac(_mac);
-    // char str[13];
-    // strcpy(str,WiFi.localIP());
-    // setIp(WiFi.localIP().toString());
-    // setMac(WiFi.macAddress());
+  
     Serial.println("");
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(getIp());
     Serial.println(getMac());
-
-    // Serial.println(WiFi.localIP());
-    // Serial.println(WiFi.macAddress());
-
   }
 }
