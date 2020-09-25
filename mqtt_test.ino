@@ -7,6 +7,7 @@
 #include "configIOT.h"
 #include "data.h"
 
+char * stringToChar2(String str);
 
 long tps = 0;
 bool tmp = 0;
@@ -49,21 +50,25 @@ void setup_wifi()
   }
 
   randomSeed(micros());
-  // char str[20];
+  char ip[20];
+  char mac[25];
   // Serial.println(WiFi.localIP().toString());
   // strcpy(str,WiFi.localIP());
-  String ip = WiFi.localIP().toString();
-  
- 
+  // String ip = WiFi.localIP().toString();
+  strcpy(ip,stringToChar2(WiFi.localIP().toString()));
+  strcpy(mac,stringToChar2(WiFi.macAddress()));
 
-  homeWifi->setIp(WiFi.localIP().toString());
-  homeWifi->setMac(WiFi.macAddress());
+  homeWifi->setIp(ip);
+  homeWifi->setMac(mac);
+  // homeWifi->setMac(WiFi.macAddress());
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(homeWifi->getIp());
+  Serial.println(ip);
   Serial.println("MAC address: ");
   Serial.println(homeWifi->getMac());
+
 }
 
 void setup_mqtt()
@@ -149,13 +154,15 @@ void setup()
    setup_wifi();
   // setup_mqtt();
   //initDataDevice();
-  Serial.println(fonctionSeule());
+  // Serial.println(fonctionSeule());
   
   
 }
 
 void loop()
 {
+  serial.println("fin");
+  
   // Serial.print("test retour de data :");
   // //Serial.println(datas[0]->getName());
 
@@ -165,9 +172,8 @@ void loop()
   // //On utilise pas un delay pour ne pas bloquer la réception de messages
   // if (millis() - tps > 10000)
   // {
-  //   tps = millis();
-  //   float temp = random(30);
-  //   temp = 1;
+  //   tps = Serial.print("str :" );
+  Serial.println(tmp); 1;
   //   tmp = !tmp;
   //   //mqtt_publish("pub/1ab",temp);
   //   mqtt_publish("pub/13ab", tmp);
@@ -179,4 +185,14 @@ void loop()
   // nb++;
   // //strcpy(info,"");
   // delay(1500);
+}
+
+
+char * stringToChar2(String str) {
+  char tmp[str.length()+1];
+  for (int i =0; i< str.length(); i++){
+    tmp[i] = str[i];
+  }
+  tmp[str.length()] ='\0';
+  return tmp;
 }

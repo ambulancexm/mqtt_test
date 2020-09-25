@@ -28,6 +28,8 @@ class configWifi
     char* getNumWifi();
     void setIp(String ip);
     void setMac(String mac);
+    void setIp(char * ip);
+    void setMac(char* mac);
     char* getIp();
     char* getMac();
     
@@ -64,13 +66,15 @@ char* configWifi::getAP(){
 }
 // ip
 char* configWifi::getIp(){
-  Serial.print("dans le getter : ");
-  Serial.println(this->ip);
   return this->ip;
 }
 
 void configWifi::setIp(String ip){
   this->ip = stringToChar(ip);
+}
+
+void configWifi::setIp(char * ip){
+  this->ip = ip;
 }
 
 //mac
@@ -79,6 +83,9 @@ char* configWifi::getMac(){
 }
 void configWifi::setMac(String mac){
   this->mac = stringToChar(mac);
+}
+void configWifi::setMac(char * mac){
+  this->mac = mac;
 }
 
 
