@@ -16,31 +16,25 @@ int cpt = 0;
 
   unsigned long lastMsg = 0;
   char msg[MSG_BUFFER_SIZE];
-// WiFiClient espClient;
-// PubSubClient client(espClient);
+
 
 Data *datas[10];
 configWifi *configWifis[10];
 
 configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
-// configIot* iot = new configIot();
-// void initDataDevice(){
-  
-//   configWifis[0] = new configWifi("raspapweb-gui", "ChangeMe", "10.3.43.109");
-//   configWifis[1] = new configWifi("thomas", "tiliatilia", "192.168.43.109");
-// }
-
 
 void setup()
 {
   Serial.begin(115200);
   homeWifi->runWifi();
-  // iot->runIot();
+  
   char foo[25];
   strcpy(foo,homeWifi->getMac());
   setup_mqtt(foo);
   
 }
+
+
 void loop()
 {
   client.loop();
@@ -56,39 +50,7 @@ void loop()
     client.publish("test", "test");
     cpt++;
   }
-// if (!client.connected())
-//   {
-//     char foo[25];
-//     strcpy(foo,homeWifi->getMac());
-//     setup_mqtt(foo);
-   
-//   }
-//   client.loop();
 
-  // Serial.println("fin");
-
-  // Serial.print("test retour de data :");
-  // //Serial.println(datas[0]->getName());
-
-  // char info[255];
-  // reconnect();
-  // client.loop();
-  // //On utilise pas un delay pour ne pas bloquer la réception de messages
-  // if (millis() - tps > 10000)
-  // {
-  //   tps = Serial.print("str :" );
-  // Serial.println(tmp); 1;
-  //   tmp = !tmp;
-  //   //mqtt_publish("pub/1ab",temp);
-  //   mqtt_publish("pub/13ab", tmp);
-  // }
-  // // strcpy(info, "");
-  // // strcat(info, configWifis[0]->getAP());
-
-  // client.publish("loc/tmpTest", "info");
-  // nb++;
-  // //strcpy(info,"");
-  // delay(1500);
 }
 
 
