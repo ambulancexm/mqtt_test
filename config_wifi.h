@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "constante.h"
+//#include "constante.h"
 #include <string.h>
 #include "util.h"
 #include <ESP8266WiFi.h>
@@ -38,7 +38,7 @@ class configWifi
     char* getIp();
     char* getMac();
     void switchWifi();
-    void runWifi();
+    void runWifi(char * ssid, char * password);
     
 };
 
@@ -137,7 +137,7 @@ void configWifi::switchWifi(){
   
 }
 
-void configWifi::runWifi(){
+void configWifi::runWifi(char * ssid, char * password){
   WiFi.begin(ssid, password);
   Serial.println("");
   while (WiFi.status() != WL_CONNECTED)

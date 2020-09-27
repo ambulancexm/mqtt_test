@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "config_wifi.h"
 #include "configIOT.h"
+#include "constante.h"
 #include "data.h"
 #include "iot.h"
 
@@ -22,7 +23,7 @@ int cpt = 0;
 Data *datas[10];
 configWifi *configWifis[10];
 
-configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
+configWifi* homeWifi = new configWifi(ssid, password);
 // configIot* iot = new configIot();
 // void initDataDevice(){
   
@@ -34,7 +35,7 @@ configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
 void setup()
 {
   Serial.begin(115200);
-  homeWifi->runWifi();
+  homeWifi->runWifi(ssid,password);
   // iot->runIot();
   char foo[25];
   strcpy(foo,homeWifi->getMac());
