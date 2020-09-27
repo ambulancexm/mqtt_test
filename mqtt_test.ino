@@ -12,9 +12,10 @@ bool tmp = 0;
 long nb = 0;
 char wifiMac[20];
 int cpt = 0;
+#define MSG_BUFFER_SIZE 50
 
   unsigned long lastMsg = 0;
-  char msg[50];
+  char msg[MSG_BUFFER_SIZE];
 // WiFiClient espClient;
 // PubSubClient client(espClient);
 
@@ -47,9 +48,10 @@ void loop()
 
   if (now - lastMsg > 2000)
   {
+    snprintf(msg, MSG_BUFFER_SIZE, "%d", cpt);
     lastMsg = now;
     
-    
+    client.publish("temp/test", msg);
     client.publish("loc/tmpTest", "info");
     client.publish("test", "test");
     cpt++;
