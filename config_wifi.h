@@ -65,7 +65,7 @@ configWifi::configWifi(){
 }
 
  
-
+// ça ne marche pas
 char* configWifi::getAP(){
   char rt[255];
   strcpy(rt,ssid);
@@ -156,7 +156,7 @@ void configWifi::runWifi(){
 
   setIp(_ip);
   setMac(_mac);
-  
+
     Serial.println("");
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
