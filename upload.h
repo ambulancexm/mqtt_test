@@ -3,11 +3,6 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
-#ifndef STASSID
-#define STASSID "thomas"
-#define STAPSK  "tiliatilia"
-#endif
-
 
 void setupUpload() {
   
@@ -70,6 +65,6 @@ void setupUpload() {
   Serial.println(WiFi.localIP());
 }
 
-void loop() {
+void loopUpload() {
   ArduinoOTA.handle();
 }

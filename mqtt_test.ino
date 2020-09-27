@@ -6,7 +6,7 @@
 #include "configIOT.h"
 #include "data.h"
 #include "iot.h"
-
+#include "upload.h"
 long tps = 0;
 bool tmp = 0;
 long nb = 0;
@@ -25,6 +25,7 @@ configWifi* homeWifi = new configWifi("thomas", "tiliatilia");
 
 void setup()
 {
+  setupUpload();
   Serial.begin(115200);
   homeWifi->runWifi();
   
@@ -37,6 +38,7 @@ void setup()
 
 void loop()
 {
+  loopUpload();
   client.loop();
   unsigned long now = millis();
 
