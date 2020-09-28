@@ -36,28 +36,42 @@ configWifi* homeWifi = new configWifi(ssid, password);
 void setup()
 {
   Serial.begin(115200);
-  homeWifi->runWifi(ssid,password);
-  // iot->runIot();
-  char foo[25];
-  strcpy(foo,homeWifi->getMac());
-  setup_mqtt(foo);
+
+  //init Mesh 
+  mesh.setDebugMsgTypes( ERROR | STARTUP | MESH_STATUS);  // set before init() so that you can see startup messages
+  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
+  mesh.onReceive(&receivedCallback);
+  mesh.onNewConnection(&newConnectionCallback);
+  mesh.onChangedConnections(&changedConnectionCallback);
+  mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
+
+  userScheduler.addTask( taskSendMessage );
+  taskSendMessage.enable();
+
+  // // init wifi et pub/sub
+  // homeWifi->runWifi(STASSID,STAPSK);
+  // // iot->runIot();
+  // char foo[25];
+  // strcpy(foo,homeWifi->getMac());
+  // setup_mqtt(foo);
   
 }
 void loop()
 {
-  client.loop();
-  unsigned long now = millis();
+  mesh.update();
+  // client.loop();
+  // unsigned long now = millis();
 
-  if (now - lastMsg > 2000)
-  {
-    snprintf(msg, MSG_BUFFER_SIZE, "%d", cpt);
-    lastMsg = now;
+  // if (now - lastMsg > 2000)
+  // {
+  //   snprintf(msg, MSG_BUFFER_SIZE, "%d", cpt);
+  //   lastMsg = now;
     
-    client.publish("temp/test", msg);
-    client.publish("loc/tmpTest", "info");
-    client.publish("test", "test");
-    cpt++;
-  }
+  //   client.publish("temp/test", msg);
+  //   client.publish("loc/tmpTest", "info");
+  //   client.publish("test", "test");
+  //   cpt++;
+  // }
 // if (!client.connected())
 //   {
 //     char foo[25];

@@ -8,9 +8,6 @@
 //************************************************************
 #include "painlessMesh.h"
 
-#define   MESH_PREFIX     "whateverYouLike"
-#define   MESH_PASSWORD   "somethingSneaky"
-#define   MESH_PORT       5555
 
 String ramdomTemp();
 
@@ -53,24 +50,24 @@ void nodeTimeAdjustedCallback(int32_t offset) {
     Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
 }
 
-void setup() {
-  Serial.begin(115200);
+// void setup() {
+//   Serial.begin(115200);
 
-mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-//  mesh.setDebugMsgTypes( ERROR | STARTUP | MESH_STATUS);  // set before init() so that you can see startup messages
+// mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
+// //  mesh.setDebugMsgTypes( ERROR | STARTUP | MESH_STATUS);  // set before init() so that you can see startup messages
 
-  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
-  mesh.onReceive(&receivedCallback);
-  mesh.onNewConnection(&newConnectionCallback);
-  mesh.onChangedConnections(&changedConnectionCallback);
-  mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
+//   mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
+//   mesh.onReceive(&receivedCallback);
+//   mesh.onNewConnection(&newConnectionCallback);
+//   mesh.onChangedConnections(&changedConnectionCallback);
+//   mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
-  userScheduler.addTask( taskSendMessage );
-  taskSendMessage.enable();
-}
+//   userScheduler.addTask( taskSendMessage );
+//   taskSendMessage.enable();
+// }
 
-void loop() {
-  // it will run the user scheduler as well
-  mesh.update();
+// void loop() {
+//   // it will run the user scheduler as well
+//   mesh.update();
   
-}
+// }
