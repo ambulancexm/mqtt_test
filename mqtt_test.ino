@@ -7,6 +7,7 @@
 #include "constante.h"
 #include "data.h"
 #include "iot.h"
+#include "meshFile.h"
 
 long tps = 0;
 bool tmp = 0;
