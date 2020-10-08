@@ -12,16 +12,12 @@
 #include <painlessMesh.h>
 #include <PubSubClient.h>
 #include <WiFiClient.h>
+#include "constante.h"
 
 
-#define   MESH_PREFIX     "whateverYouLike"
-#define   MESH_PASSWORD   "somethingSneaky"
-#define   MESH_PORT       5555
 
-#define   STATION_SSID     "thomas"
-#define   STATION_PASSWORD "tiliatilia"
 
-#define HOSTNAME "MQTT_Bridge"
+#define HOSTNAME "MASTER_BRIDGE"
 
 // Prototypes
 void receivedCallback( const uint32_t &from, const String &msg );
@@ -46,13 +42,14 @@ void setup() {
   mesh.init( MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6 );
   mesh.onReceive(&receivedCallback);
 
-  mesh.stationManual(STATION_SSID, STATION_PASSWORD);
+  mesh.stationManual(STASSID, STAPSK);
   mesh.setHostname(HOSTNAME);
 
   // Bridge node, should (in most cases) be a root node. See [the wiki](https://gitlab.com/painlessMesh/painlessMesh/wikis/Possible-challenges-in-mesh-formation) for some background
   mesh.setRoot(true);
   // This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
   mesh.setContainsRoot(true);
+  // et la
 }
 
 void loop() {
