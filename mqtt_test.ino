@@ -38,19 +38,19 @@ void setup()
   Serial.begin(115200);
 
   //init Mesh 
-  mesh.setDebugMsgTypes( ERROR | STARTUP | MESH_STATUS);  // set before init() so that you can see startup messages
-  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
-  mesh.onReceive(&receivedCallback);
-  mesh.onNewConnection(&newConnectionCallback);
-  mesh.onChangedConnections(&changedConnectionCallback);
-  mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
+  // mesh.setDebugMsgTypes( ERROR | STARTUP | MESH_STATUS);  // set before init() so that you can see startup messages
+  // mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
+  // mesh.onReceive(&receivedCallback);
+  // mesh.onNewConnection(&newConnectionCallback);
+  // mesh.onChangedConnections(&changedConnectionCallback);
+  // mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
-  userScheduler.addTask( taskSendMessage );
-  taskSendMessage.enable();
+  // userScheduler.addTask( taskSendMessage );
+  // taskSendMessage.enable();
 
   // // init wifi et pub/sub
-  // homeWifi->runWifi(STASSID,STAPSK);
-  // // iot->runIot();
+  homeWifi->runWifi(STASSID,STAPSK);
+  // iot->runIot();
   // char foo[25];
   // strcpy(foo,homeWifi->getMac());
   // setup_mqtt(foo);
@@ -58,7 +58,7 @@ void setup()
 }
 void loop()
 {
-  mesh.update();
+  // mesh.update();
   // client.loop();
   // unsigned long now = millis();
 
